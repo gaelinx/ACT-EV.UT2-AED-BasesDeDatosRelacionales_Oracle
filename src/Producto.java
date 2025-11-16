@@ -235,7 +235,6 @@ public class Producto {
             WHERE p.stock_actual < ?
             ORDER BY p.stock_actual
         """;
-
         try (Connection conn = ConexionOracle.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 

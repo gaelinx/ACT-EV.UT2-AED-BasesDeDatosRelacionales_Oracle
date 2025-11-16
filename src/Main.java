@@ -34,6 +34,7 @@ public class Main {
                     case 13 -> menuRegistrarVenta();
                     case 14 -> venta.listar();
                     case 15 -> DatosEjemplo.insertar();
+                    case 16 -> menuEliminarTodo();
                     case 0 -> {
                         System.out.println("\n¡Hasta pronto!");
                         continuar = false;
@@ -77,10 +78,13 @@ public class Main {
         System.out.println("║  14. Listar ventas                                 ║");
         System.out.println("║                                                    ║");
         System.out.println("║  15. Insertar datos de ejemplo                     ║");
+        System.out.println("║  16. Eliminar todas las tablas (REINICIAR)         ║");
         System.out.println("║   0. Salir                                         ║");
         System.out.println("╚════════════════════════════════════════════════════╝");
         System.out.print("Seleccione una opción: ");
     }
+
+    // ==================== PROVEEDOR ====================
 
     private static void menuInsertarProveedor() {
         System.out.print("Nombre del proveedor: ");
@@ -124,6 +128,7 @@ public class Main {
         proveedor.eliminar(id);
     }
 
+    // ==================== PRODUCTO ====================
 
     private static void menuInsertarProducto() {
         proveedor.listar();
@@ -204,6 +209,8 @@ public class Main {
         producto.stockBajo(stockMinimo);
     }
 
+    // ==================== Ventas ====================
+
     private static void menuRegistrarVenta() {
         System.out.print("ID del producto vendido: ");
         int idProducto = Integer.parseInt(sc.nextLine());
@@ -212,5 +219,21 @@ public class Main {
         int cantidad = Integer.parseInt(sc.nextLine());
 
         venta.registrar(idProducto, cantidad);
+    }
+
+    // ==================== UTILIDADES ====================
+
+    private static void menuEliminarTodo() {
+        System.out.println("\nADVERTENCIA: Esta acción eliminará TODAS las tablas, secuencias y datos.");
+        System.out.print("¿Está seguro de continuar? (S/N): ");
+        String confirmacion = sc.nextLine();
+
+        if (confirmacion.equalsIgnoreCase("S")) {
+            ConexionOracle.eliminarTablas();
+            System.out.println("\nBase de datos reiniciada completamente.");
+            System.out.println("  Puede usar la opción 15 para cargar datos de ejemplo.");
+        } else {
+            System.out.println("Operación cancelada.");
+        }
     }
 }

@@ -1,5 +1,8 @@
 import java.sql.*;
 
+/**
+ * Clase que se encarga de controlar la conexion con oracle
+ */
 public class ConexionOracle {
 
     private static final String URL = "jdbc:oracle:thin:@localhost:1521:XE";
@@ -11,6 +14,7 @@ public class ConexionOracle {
     }
 
     public static void crearTablas(){
+        //QUERY que se encarga del Auto Increment de los IDs
         String[] sqlSequences = {
                 "CREATE SEQUENCE seq_proveedor START WITH 1 INCREMENT BY 1",
                 "CREATE SEQUENCE seq_producto START WITH 1 INCREMENT BY 1",
@@ -55,10 +59,8 @@ public class ConexionOracle {
                     REFERENCES PRODUCTOS(id_producto)
             )
         """;
-
         try (Connection conn = getConnection();
              Statement stmt = conn.createStatement()) {
-
             // Crear secuencias (ignorar error si ya existen)
             for (String sqlSeq : sqlSequences) {
                 try {
@@ -70,7 +72,6 @@ public class ConexionOracle {
                     }
                 }
             }
-
             // Crear tablas (ignorar error si ya existen)
             try {
                 stmt.execute(sqlProveedores);
@@ -79,7 +80,6 @@ public class ConexionOracle {
                     throw e;
                 }
             }
-
             try {
                 stmt.execute(sqlProductos);
             } catch (SQLException e) {
@@ -87,7 +87,6 @@ public class ConexionOracle {
                     throw e;
                 }
             }
-
             try {
                 stmt.execute(sqlVentas);
             } catch (SQLException e) {
@@ -95,14 +94,14 @@ public class ConexionOracle {
                     throw e;
                 }
             }
-
             System.out.println("Tablas y secuencias creadas/verificadas correctamente");
-
         } catch (SQLException e) {
             System.err.println("Error al crear tablas: " + e.getMessage());
         }
     }
 
+    //Clase encargada de eliminar todas las tablas para resetear la aplicacion
+    //Se usa para despues de testear los datos de ejemplo
     public static void eliminarTablas() {
         String[] sqlDrop = {
                 "DROP TABLE VENTAS CASCADE CONSTRAINTS",
